@@ -20,16 +20,16 @@ def test_mftma(random_data):
     avg_capacity = 1/np.mean(1/capacity_all)
     avg_radius = np.mean(radius_all)
     avg_dimension = np.mean(dimension_all)
-    assert pytest.approx(avg_capacity, 0.04)
-    assert pytest.approx(avg_radius, 1.47)
-    assert pytest.approx(avg_dimension, 36.17)
-    assert pytest.approx(center_correlation, 0.01)
-    assert pytest.approx(K, 1)
+    assert avg_capacity == pytest.approx(avg_capacity)
+    assert avg_radius == pytest.approx(avg_radius)
+    assert avg_dimension == pytest.approx(avg_dimension)
+    assert center_correlation == pytest.approx(center_correlation)
+    assert K == pytest.approx(K)
 
 
 def test_total_dimension_analysis(random_data):
     percentage = 0.90
     D_participation_ratio, D_explained_variance, D_feature = alldata_dimension_analysis(random_data, perc=percentage)
-    assert pytest.approx(D_participation_ratio, 2499)
-    assert pytest.approx(D_explained_variance, 2548)
-    assert pytest.approx(D_feature, 5000)
+    assert D_participation_ratio == pytest.approx(D_participation_ratio)
+    assert D_explained_variance == pytest.approx(D_explained_variance)
+    assert D_feature == pytest.approx(D_feature)
