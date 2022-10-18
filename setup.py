@@ -16,5 +16,6 @@ setup(
         'cvxopt>=1.2.3',
         'scikit-learn>=0.21.3',
         'torch>=1.1',
-    ]
+    ],
+    tests="tests",
 )

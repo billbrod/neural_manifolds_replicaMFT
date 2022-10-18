@@ -1,0 +1,64 @@
+name: tests
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # weekly
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    run-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+      fail-fast: false
+    name: Test basic usage
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: setup.py
+      - name: Install dependencies
+        run: |
+          # using the --upgrade and --upgrade-strategy eager flags ensures that
+          # pip will always install the latest allowed version of all
+          # dependencies, to make sure the cache doesn't go stale
+          pip install --upgrade --upgrade-strategy eager -e .
+          pip install --upgrade --upgrade-strategy eager pytest-xdist
+      - name: Run tests with pytest
+        # we have two cores on the linux github action runners and these tests
+        # take a while
+        # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+        run: pytest -n 2 tests/
+  notebooks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+      fail-fast: false
+    name: Execute notebooks
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: setup.py
+      - name: Install dependencies
+        run: |
+          pip install --upgrade --upgrade-strategy eager -e .
+          pip install jupyter
+          # this notebook takes a long time. We use papermill's parameters to
+          # avoid training and only examine the first layer (we just want to
+          # test that the cells run)
+          pip install --upgrade --upgrade-strategy eager papermill
+      - name: Run notebooks
+        run: papermill examples/MFTMA_VGG16_example.ipynb examples/MFTMA_VGG16_example_output.ipynb -p training_epochs 0 -p layer_nums 1 -k python3 --cwd examples/
