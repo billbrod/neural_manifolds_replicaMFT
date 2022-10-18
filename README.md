@@ -23,7 +23,7 @@ pip install -e .
 ### Original package versions
 
 When this repo was used to perform the analyses in the associated NeurIPS
-submission, python version ??? was used, with the following versions:
+submission, python version 3.5.2 was used, with the following packages:
 
 ```
 autograd==1.3
