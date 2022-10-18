@@ -15,15 +15,11 @@ If you find this code useful for your research, please cite [our paper](https://
 
 ## Install
 
-First install required dependencies with
-```
-pip install -r requirements.txt
-```
-
-Then install the package via
+Install the package and its dependencies via
 ```
 pip install -e .
 ```
+
 ## Usage
 The following contains usage instructions for constructing data and feeding it to the analysis tool. An example analysis of a deep neural network implemented in PyTorch along with some higher level tools can be found in this [example notebook](examples/MFTMA_VGG16_example.ipynb) (note that this notebook also requires `matplotlib` and `torchvision` to be installed).
 
