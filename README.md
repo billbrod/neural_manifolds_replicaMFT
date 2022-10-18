@@ -20,6 +20,20 @@ Install the package and its dependencies via
 pip install -e .
 ```
 
+### Original package versions
+
+When this repo was used to perform the analyses in the associated NeurIPS
+submission, python version ??? was used, with the following versions:
+
+```
+autograd==1.3
+numpy==1.17.0
+pymanopt==0.2.4
+scipy==1.2.0
+cvxopt==1.2.3
+scikit-learn==0.21.3
+```
+
 ## Usage
 The following contains usage instructions for constructing data and feeding it to the analysis tool. An example analysis of a deep neural network implemented in PyTorch along with some higher level tools can be found in this [example notebook](examples/MFTMA_VGG16_example.ipynb) (note that this notebook also requires `matplotlib` and `torchvision` to be installed).
 
