@@ -6,6 +6,7 @@ Classification and Geometry of General Perceptual Manifolds (Phys. Rev. X 2018)
 Separability and Geometry of Object Manifolds in Deep Neural Networks
 '''
 
+import pymanopt
 import autograd.numpy as np
 from scipy.linalg import qr
 from functools import partial
@@ -13,7 +14,7 @@ from functools import partial
 from cvxopt import solvers, matrix
 from pymanopt.manifolds import Stiefel
 from pymanopt import Problem
-from pymanopt.solvers import ConjugateGradient
+from pymanopt.optimizers import ConjugateGradient
 
 # Configure cvxopt solvers
 solvers.options['show_progress'] = False
@@ -413,7 +414,7 @@ def CGmanopt(X, objective_function, A, **kwargs):
 
     Args:
         X: Initial 2D array of shape (n, k) such that X.T * X = I_k
-        objective_function: Objective function F(X, A) to minimize.
+        objective_function: Objective function F(X, A) to minimize. Must use autograd (not pytorch, numpy, etc).
         A: Additional parameters for the objective function F(X, A)
 
     Keyword Args:
@@ -424,13 +425,17 @@ def CGmanopt(X, objective_function, A, **kwargs):
     '''
 
     manifold = Stiefel(X.shape[0], X.shape[1])
+
+    @pymanopt.function.autograd(manifold)
     def cost(X):
         c, _ = objective_function(X, A)
         return c
-    problem = Problem(manifold=manifold, cost=cost, verbosity=0)
-    solver = ConjugateGradient(logverbosity=0)
-    Xopt = solver.solve(problem)
-    return Xopt, None
+    problem = Problem(manifold=manifold, cost=cost)
+    solver = ConjugateGradient(log_verbosity=0, verbosity=0)
+    Xopt = solver.run(problem)
+    # Xopt is the OptimizerResult class, but we only need the optimal value,
+    # which is Xopt.point (and a 2d array)
+    return Xopt.point, None
 
 
 def square_corrcoeff_full_cost(V, X, grad=True):

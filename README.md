@@ -25,7 +25,7 @@ Then install the package via
 pip install -e .
 ```
 ## Usage
-The following contains usage instructions for constructing data and feeding it to the analysis tool. An example analysis of a deep neural network implemented in PyTorch along with some higher level tools can be found in this [example notebook](examples/MFTMA_VGG16_example.ipynb).
+The following contains usage instructions for constructing data and feeding it to the analysis tool. An example analysis of a deep neural network implemented in PyTorch along with some higher level tools can be found in this [example notebook](examples/MFTMA_VGG16_example.ipynb) (note that this notebook also requires `matplotlib` and `torchvision` to be installed).
 
 ### Constructing data for analysis
 Sample **P** classes from the dataset, and **M** examples from each class.  Calculate the activations at the desired layer for each example, and package them into an array of shape **(N, M)** where **N** is the dimensionality of the layer.  In the current implementation, **M** should be less than **N**.  Assemble each of these into an iterable (ex: a list like `X = [(N, M1), (N, M2),..., (N,MP)]`)
