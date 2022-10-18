@@ -44,6 +44,9 @@ def analyze(model, dataset, sampled_classes=50, examples_per_class=50, kappa=0, 
     # Move the model and data to the device
     model = model.to(device)
     manifold_data = [d.to(device) for d in manifold_data]
+    # if the user passes a single int instead of a list, change to a list
+    if layer_nums is not None and not hasattr(layer_nums, '__iter__'):
+        layer_nums = [layer_nums]
     # Extract the activations
     activations = extractor(model, manifold_data, layer_nums=layer_nums, layer_types=layer_types)
     # Set the seed for random projections

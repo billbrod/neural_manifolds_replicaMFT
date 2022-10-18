@@ -25,7 +25,7 @@ def extractor(model, data, layer_nums=None, layer_types=None):
             the order of the given data.
     '''
     assert (layer_nums is None or layer_types is None), 'Only specify one of layer_nums or layer_types'
-    # if the user passes a single int instead of a list
+    # if the user passes a single int instead of a list, change to a list
     if layer_nums is not None and not hasattr(layer_nums, '__iter__'):
         layer_nums = [layer_nums]
     global extracted_dict
