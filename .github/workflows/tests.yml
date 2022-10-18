@@ -55,7 +55,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade --upgrade-strategy eager -e .
-          pip install jupyter
+          # matplotlib and torchvision are required in the notebook, but not for the main package
+          pip install jupyter matplotlib torchvision
           # this notebook takes a long time. We use papermill's parameters to
           # avoid training and only examine the first layer (we just want to
           # test that the cells run)
