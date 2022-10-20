@@ -62,4 +62,4 @@ jobs:
           # test that the cells run)
           pip install --upgrade --upgrade-strategy eager papermill
       - name: Run notebooks
-        run: papermill examples/MFTMA_VGG16_example.ipynb examples/MFTMA_VGG16_example_output.ipynb -p training_epochs 0 -p layer_nums 1 -k python3 --cwd examples/
+        run: papermill examples/MFTMA_VGG16_example.ipynb examples/MFTMA_VGG16_example_output.ipynb -p training_epochs 0 -p layer_nums 1 -p projection_N 10 -k python3 --cwd examples/
