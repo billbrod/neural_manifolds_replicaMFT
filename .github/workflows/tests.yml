@@ -43,6 +43,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
+        notebook: ['Majaj2015_neuralData', 'MFTMA_VGG16_example']
       fail-fast: false
     name: Execute notebooks
     steps:
@@ -56,10 +57,19 @@ jobs:
         run: |
           pip install --upgrade --upgrade-strategy eager -e .
           # matplotlib and torchvision are required in the notebook, but not for the main package
-          pip install jupyter matplotlib torchvision
+          pip install jupyter matplotlib
+          pip install 'nbclient>=0.5.5'
+      - name: Run notebooks
+        if: ${{ matrix.notebook == 'Majaj2015_neuralData' }}
+        run: |
+          # this notebook requires brain-score
+          pip install git+https://github.com/brain-score/brain-score
+          jupyter execute examples/${{ matrix.notebook }}.ipynb --kernel_name=python3
+      - name: Run notebooks
+        if: ${{ matrix.notebook == 'MFTMA_VGG16_example' }}
+        run: |
           # this notebook takes a long time. We use papermill's parameters to
           # avoid training and only examine the first layer (we just want to
           # test that the cells run)
-          pip install --upgrade --upgrade-strategy eager papermill
-      - name: Run notebooks
-        run: papermill examples/MFTMA_VGG16_example.ipynb examples/MFTMA_VGG16_example_output.ipynb -p training_epochs 0 -p layer_nums 1 -p projection_N 10 -k python3 --cwd examples/
+          pip install --upgrade --upgrade-strategy eager papermill torchvision
+          papermill examples/${{ matrix.notebook }}.ipynb examples/${{ matrix.notebook }}_output.ipynb -p training_epochs 0 -p layer_nums 1 -p projection_N 10 -k python3 --cwd examples/
