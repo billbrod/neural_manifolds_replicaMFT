@@ -62,8 +62,9 @@ jobs:
       - name: Run notebooks
         if: ${{ matrix.notebook == 'Majaj2015_neuralData' }}
         run: |
-          # this notebook requires brain-score
-          pip install json_numpy git+https://github.com/brain-score/brain-score
+          # this notebook requires brain-score, which requires an old version of
+          # scipy
+          pip install json_numpy git+https://github.com/brain-score/brain-score scipy==1.6
           jupyter execute examples/${{ matrix.notebook }}.ipynb --kernel_name=python3
       - name: Run notebooks
         if: ${{ matrix.notebook == 'MFTMA_VGG16_example' }}
